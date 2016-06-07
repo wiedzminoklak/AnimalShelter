@@ -3,8 +3,11 @@ package animalshelter.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import animalshelter.dao.Animal;
 
+@Repository
 public class AnimalRepository implements IAnimalRepository {
 
 	private List<Animal> animals;

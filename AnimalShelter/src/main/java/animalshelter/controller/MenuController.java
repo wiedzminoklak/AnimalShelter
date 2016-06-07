@@ -2,6 +2,9 @@ package animalshelter.controller;
 
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import animalshelter.dao.Animal;
 import animalshelter.dao.exception.BadIdValidtionException;
 import animalshelter.dao.exception.BadKindValidationException;
@@ -10,9 +13,11 @@ import animalshelter.repository.AnimalRepository;
 import animalshelter.repository.IAnimalRepository;
 import validator.Validator;
 
+@Component
 public class MenuController {
 
 	private boolean isEnd;
+	@Autowired
 	private IAnimalRepository animalRepository;
 
 	public MenuController() {
