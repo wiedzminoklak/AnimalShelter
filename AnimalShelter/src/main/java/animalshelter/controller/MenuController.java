@@ -20,10 +20,6 @@ public class MenuController {
 		animalRepository = new AnimalRepository();
 	}
 
-	public boolean isEnd() {
-		return isEnd;
-	}
-
 	public void start() {
 		try (Scanner scanner = new Scanner(System.in)) {
 			while (!isEnd) {
