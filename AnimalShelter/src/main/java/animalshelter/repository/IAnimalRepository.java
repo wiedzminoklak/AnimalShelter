@@ -9,4 +9,6 @@ public interface IAnimalRepository {
 	Animal getAnimalById(Long id);
 
 	List<Animal> getAll();
+	
+	boolean addAnimal(Animal animal);
 }

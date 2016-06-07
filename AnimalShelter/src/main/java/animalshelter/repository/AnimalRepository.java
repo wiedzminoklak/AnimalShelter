@@ -35,5 +35,24 @@ public class AnimalRepository implements IAnimalRepository {
 	public List<Animal> getAll() {
 		return animals;
 	}
+	
+	@Override
+	public boolean addAnimal(Animal animal) {
+		boolean exists = false;
+		
+		for(Animal a : animals) {
+			if(a.getId() == animal.getId()) {
+				exists = true;
+				break;
+			}
+		}
+		
+		if(!exists) {
+			animals.add(animal);
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }
