@@ -11,7 +11,7 @@ import animalshelter.dao.exception.BadKindValidationException;
 import animalshelter.dao.exception.BadNameValidationException;
 import animalshelter.repository.AnimalRepository;
 import animalshelter.repository.IAnimalRepository;
-import validator.Validator;
+import animalshelter.validator.Validator;
 
 @Component
 public class MenuController {

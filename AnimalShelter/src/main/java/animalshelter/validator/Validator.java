@@ -1,4 +1,4 @@
-package validator;
+package animalshelter.validator;
 
 import animalshelter.dao.exception.BadIdValidtionException;
 import animalshelter.dao.exception.BadKindValidationException;
