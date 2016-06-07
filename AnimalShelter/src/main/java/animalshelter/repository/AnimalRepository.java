@@ -54,7 +54,7 @@ public class AnimalRepository implements IAnimalRepository {
 			return false;
 		}
 	}
-
+	
 	@Override
 	public boolean deleteAnimal(Long id) {
 		Animal animal = findAnimalById(id);

@@ -29,7 +29,8 @@ public class MenuController {
 			while (!isEnd) {
 				System.out.println("1) Show all animal");
 				System.out.println("2) Add animal");
-				System.out.println("3) Delete animal");
+				System.out.println("3) Edit animal");
+				System.out.println("4) Delete animal");
 				System.out.println("0) Exit");
 
 				String choose = scanner.next();
@@ -43,6 +44,9 @@ public class MenuController {
 						addAnimal();
 						break;
 					case "3":
+						editAnimal();
+						break;
+					case "4":
 						deleteAnimal();
 						break;
 					case "0":
@@ -92,18 +96,40 @@ public class MenuController {
 
 	}
 
+	private void editAnimal() throws BadIdValidtionException, BadKindValidationException, BadNameValidationException {
+		Scanner scanner = new Scanner(System.in);
+		System.out.print("Id of animal to eidt: ");
+		Long id = Validator.validateId(scanner.nextLine());
+
+		System.out.print("Kind: ");
+		String kind = Validator.validateKind(scanner.nextLine());
+
+		System.out.print("Name: ");
+		String name = Validator.validateName(scanner.nextLine());
+
+		Animal animal = animalRepository.findAnimalById(id);
+
+		if (animal != null) {
+			animal.setKind(kind);
+			animal.setName(name);
+			System.out.println("Animal edited");
+		} else {
+			System.out.println("This id does't exist");
+		}
+	}
+
 	private void deleteAnimal() throws BadIdValidtionException {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("Id of animal to delete: ");
 		Long id = Validator.validateId(scanner.nextLine());
-		
-		if(animalRepository.deleteAnimal(id)) {
+
+		if (animalRepository.deleteAnimal(id)) {
 			System.out.println("Animal deleted");
 		} else {
 			System.out.println("This id does't exist");
 		}
 	}
-	
+
 	private void exit() {
 		isEnd = true;
 	}
