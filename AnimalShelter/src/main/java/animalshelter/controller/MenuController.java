@@ -29,6 +29,7 @@ public class MenuController {
 			while (!isEnd) {
 				System.out.println("1) Show all animal");
 				System.out.println("2) Add animal");
+				System.out.println("3) Delete animal");
 				System.out.println("0) Exit");
 
 				String choose = scanner.next();
@@ -40,6 +41,9 @@ public class MenuController {
 						break;
 					case "2":
 						addAnimal();
+						break;
+					case "3":
+						deleteAnimal();
 						break;
 					case "0":
 						exit();
@@ -88,6 +92,18 @@ public class MenuController {
 
 	}
 
+	private void deleteAnimal() throws BadIdValidtionException {
+		Scanner scanner = new Scanner(System.in);
+		System.out.print("Id of animal to delete: ");
+		Long id = Validator.validateId(scanner.nextLine());
+		
+		if(animalRepository.deleteAnimal(id)) {
+			System.out.println("Animal deleted");
+		} else {
+			System.out.println("This id does't exist");
+		}
+	}
+	
 	private void exit() {
 		isEnd = true;
 	}

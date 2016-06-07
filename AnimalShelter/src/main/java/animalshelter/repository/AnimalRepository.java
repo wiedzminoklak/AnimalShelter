@@ -55,4 +55,30 @@ public class AnimalRepository implements IAnimalRepository {
 		}
 	}
 
+	@Override
+	public boolean deleteAnimal(Long id) {
+		Animal animal = findAnimalById(id);
+		
+		if(animal == null) {
+			return false;
+		}
+		
+		animals.remove(animal);
+		return true;
+	}
+
+	@Override
+	public Animal findAnimalById(Long id) {
+		Animal animal = null;
+		
+		for(Animal a : animals) {
+			if(a.getId() == id) {
+				animal = a;
+				break;
+			}
+		}
+		
+		return animal;
+	}
+
 }

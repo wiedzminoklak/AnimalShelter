@@ -11,4 +11,8 @@ public interface IAnimalRepository {
 	List<Animal> getAll();
 	
 	boolean addAnimal(Animal animal);
+	
+	boolean deleteAnimal(Long id);
+	
+	Animal findAnimalById(Long id);
 }
