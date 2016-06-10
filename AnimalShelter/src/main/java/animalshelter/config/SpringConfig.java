@@ -3,7 +3,7 @@ package animalshelter.config;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import animalshelter.repository.AnimalRepository;
+import animalshelter.dao.repository.AnimalRepository;
 
 @Configuration
 @ComponentScan("animalshelter")

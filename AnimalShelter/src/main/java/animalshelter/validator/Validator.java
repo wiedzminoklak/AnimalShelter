@@ -1,19 +1,37 @@
 package animalshelter.validator;
 
-import animalshelter.dao.exception.BadIdValidtionException;
-import animalshelter.dao.exception.BadKindValidationException;
-import animalshelter.dao.exception.BadNameValidationException;
+import animalshelter.validator.exception.BadKindValidationException;
+import animalshelter.validator.exception.BadLongValidationException;
+import animalshelter.validator.exception.BadDoubleValidationException;
+import animalshelter.validator.exception.BadIntegerValidationException;
+import animalshelter.validator.exception.BadNameValidationException;
 
 public class Validator {
 
-	public static Long validateId(String id) throws BadIdValidtionException {
+	public static Integer validateInteger(String numb) throws BadIntegerValidationException {
 		try {
-			return Long.parseLong(id);
+			return Integer.parseInt(numb);
 		} catch (NumberFormatException e) {
-			throw new BadIdValidtionException();
+			throw new BadIntegerValidationException();
 		}
 	}
-
+	
+	public static Long validateLong(String numb) throws BadLongValidationException {
+		try {
+			return Long.parseLong(numb);
+		} catch (NumberFormatException e) {
+			throw new BadLongValidationException();
+		}
+	}
+	
+	public static Double validateDouble(String numb) throws BadDoubleValidationException {
+		try {
+			return Double.parseDouble(numb);
+		} catch (NumberFormatException e) {
+			throw new BadDoubleValidationException();
+		}
+	}
+	
 	public static String validateKind(String kind) throws BadKindValidationException {
 		kind = trimSpaceFromBeginAndEnd(kind);
 

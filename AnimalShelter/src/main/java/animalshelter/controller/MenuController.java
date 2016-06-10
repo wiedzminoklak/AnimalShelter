@@ -5,13 +5,17 @@ import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import animalshelter.dao.Animal;
-import animalshelter.dao.exception.BadIdValidtionException;
-import animalshelter.dao.exception.BadKindValidationException;
-import animalshelter.dao.exception.BadNameValidationException;
-import animalshelter.repository.AnimalRepository;
-import animalshelter.repository.IAnimalRepository;
+import animalshelter.dao.exception.DataBaseException;
+import animalshelter.dao.exception.JdbcDriverNotFound;
+import animalshelter.dao.repository.AnimalRepository;
+import animalshelter.dao.repository.IAnimalRepository;
+import animalshelter.model.Animal;
 import animalshelter.validator.Validator;
+import animalshelter.validator.exception.BadDoubleValidationException;
+import animalshelter.validator.exception.BadIntegerValidationException;
+import animalshelter.validator.exception.BadKindValidationException;
+import animalshelter.validator.exception.BadLongValidationException;
+import animalshelter.validator.exception.BadNameValidationException;
 
 @Component
 public class MenuController {
@@ -56,38 +60,57 @@ public class MenuController {
 					default:
 						unknownAction();
 					}
-				} catch (BadIdValidtionException e) {
+				} catch (BadLongValidationException e) {
 					System.out.println("Id must be integer!");
 				} catch (BadKindValidationException e) {
-					System.out.println("Kind can contains only letters and spaces");
+					System.out.println("Kind can contains only letters and spaces!");
 				} catch (BadNameValidationException e) {
-					System.out.println("Name can contains only letters;");
+					System.out.println("Name can contains only letters!;");
+				} catch (BadIntegerValidationException e) {
+					System.out.println("Age must be integer!");
+				} catch (BadDoubleValidationException e) {
+					System.out.println("Double must be integer!");
+				} catch (JdbcDriverNotFound e) {
+					System.out.println("Application cannot find JDBC driver!");
+				} catch (DataBaseException e) {
+					System.out.println("Database error please try later!");
 				}
 			}
 		}
 	}
 
-	private void showAllAnimals() {
+	private void showAllAnimals() throws JdbcDriverNotFound, DataBaseException {
 		for (Animal a : animalRepository.getAll()) {
 			System.out.println("Id: " + a.getId());
 			System.out.println("Kind: " + a.getKind());
 			System.out.println("Name: " + a.getName());
+			System.out.println("Age: " + a.getAge());
+			System.out.println("Weight: " + a.getWeight());
+			System.out.println("Arrival date: " + a.getArrivalDate());
 			System.out.println("-----------------------------------");
 		}
 	}
 
-	private void addAnimal() throws BadIdValidtionException, BadKindValidationException, BadNameValidationException {
+	private void addAnimal() throws BadLongValidationException, BadKindValidationException, BadNameValidationException, BadIntegerValidationException, BadDoubleValidationException, JdbcDriverNotFound, DataBaseException {
 		Scanner scanner = new Scanner(System.in);
-		System.out.print("Id: ");
-		Long id = Validator.validateId(scanner.nextLine());
-
+		
 		System.out.print("Kind: ");
 		String kind = Validator.validateKind(scanner.nextLine());
 
 		System.out.print("Name: ");
 		String name = Validator.validateName(scanner.nextLine());
+		
+		System.out.print("Age: ");
+		Integer age = Validator.validateInteger(scanner.nextLine());
 
-		Animal animal = new Animal(id, kind, name);
+		System.out.print("Weight: ");
+		Double weight = Validator.validateDouble(scanner.nextLine());
+
+		Animal animal = new Animal();
+		animal.setKind(kind);
+		animal.setName(name);
+		animal.setAge(age);
+		animal.setWeight(weight);
 
 		if (animalRepository.addAnimal(animal)) {
 			System.out.println("Animal added");
@@ -97,32 +120,43 @@ public class MenuController {
 
 	}
 
-	private void editAnimal() throws BadIdValidtionException, BadKindValidationException, BadNameValidationException {
+	private void editAnimal() throws BadLongValidationException, BadKindValidationException, BadNameValidationException, BadIntegerValidationException, BadDoubleValidationException, JdbcDriverNotFound, DataBaseException {
 		Scanner scanner = new Scanner(System.in);
+		
 		System.out.print("Id of animal to eidt: ");
-		Long id = Validator.validateId(scanner.nextLine());
+		Long id = Validator.validateLong(scanner.nextLine());
 
 		System.out.print("Kind: ");
 		String kind = Validator.validateKind(scanner.nextLine());
 
 		System.out.print("Name: ");
 		String name = Validator.validateName(scanner.nextLine());
+		
+		System.out.print("Age: ");
+		Integer age = Validator.validateInteger(scanner.nextLine());
+
+		System.out.print("Weight: ");
+		Double weight = Validator.validateDouble(scanner.nextLine());
 
 		Animal animal = animalRepository.findAnimalById(id);
 
 		if (animal != null) {
 			animal.setKind(kind);
 			animal.setName(name);
+			animal.setAge(age);
+			animal.setWeight(weight);
+			animalRepository.editAnimal(animal);
 			System.out.println("Animal edited");
 		} else {
 			System.out.println("This id does't exist");
 		}
 	}
 
-	private void deleteAnimal() throws BadIdValidtionException {
+	private void deleteAnimal() throws BadLongValidationException, JdbcDriverNotFound, DataBaseException {
 		Scanner scanner = new Scanner(System.in);
+		
 		System.out.print("Id of animal to delete: ");
-		Long id = Validator.validateId(scanner.nextLine());
+		Long id = Validator.validateLong(scanner.nextLine());
 
 		if (animalRepository.deleteAnimal(id)) {
 			System.out.println("Animal deleted");

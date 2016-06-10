@@ -1,4 +1,4 @@
-package animalshelter.dao.exception;
+package animalshelter.validator.exception;
 
 public class BadKindValidationException extends Exception {
 
