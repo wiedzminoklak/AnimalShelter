@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import animalshelter.constant.Const;
@@ -20,6 +21,9 @@ import animalshelter.model.Animal;
 @Repository
 public class AnimalRepository implements IAnimalRepository {
 
+	@Autowired
+	DbUtils dbUtils;
+	
 	public AnimalRepository() {
 	}
 
@@ -48,7 +52,7 @@ public class AnimalRepository implements IAnimalRepository {
 		List<Animal> animals = new ArrayList<>();
 		
 		try {
-			con = DbUtils.getConnection();
+			con = dbUtils.getConnection();
 			String sql = "SELECT a.animal_id, a.name, k.name as kind_name, a.age, a.weight, a.arrival_date "
 					+ "FROM animal a " + "LEFT JOIN kind k " + "ON a.kind_id = k.kind_id";
 
@@ -72,7 +76,7 @@ public class AnimalRepository implements IAnimalRepository {
 		} catch (SQLException e) {
 			throw new DataBaseException();
 		} finally {
-			DbUtils.close(con, stmt, rs);
+			dbUtils.close(con, stmt, rs);
 		}
 
 		return animals;
@@ -97,7 +101,7 @@ public class AnimalRepository implements IAnimalRepository {
 			Connection con = null;
 			PreparedStatement stmt = null;
 			try {
-				con = DbUtils.getConnection();
+				con = dbUtils.getConnection();
 				String sql = "INSERT INTO animal (name, kind_id, age, weight, arrival_date)" + "VALUES (?, ?, ?, ?, ?)";
 				stmt = con.prepareStatement(sql);
 				stmt.setString(1, animal.getName());
@@ -112,7 +116,7 @@ public class AnimalRepository implements IAnimalRepository {
 			} catch (SQLException e) {
 				throw new DataBaseException();
 			} finally {
-				DbUtils.close(con, stmt);
+				dbUtils.close(con, stmt);
 			}
 
 			return true;
@@ -128,7 +132,7 @@ public class AnimalRepository implements IAnimalRepository {
 		PreparedStatement stmt = null;
 		
 		try {
-			con = DbUtils.getConnection();
+			con = dbUtils.getConnection();
 			String sql = "DELETE FROM animal WHERE animal_id = ?";
 			stmt = con.prepareStatement(sql);
 			stmt.setLong(1, id);
@@ -138,7 +142,7 @@ public class AnimalRepository implements IAnimalRepository {
 		} catch (SQLException e) {
 			throw new DataBaseException();
 		} finally {
-			DbUtils.close(con, stmt);
+			dbUtils.close(con, stmt);
 		}
 
 		if (animal == null) {
@@ -154,7 +158,7 @@ public class AnimalRepository implements IAnimalRepository {
 		PreparedStatement stmt = null;
 		
 		try {
-			con = DbUtils.getConnection();
+			con = dbUtils.getConnection();
 			String sql = "UPDATE animal SET name = ?, kind_id = ?, age = ?, weight = ? WHERE animal_id = ?";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, animal.getName());
@@ -169,7 +173,7 @@ public class AnimalRepository implements IAnimalRepository {
 		} catch (SQLException e) {
 			throw new DataBaseException();
 		} finally {
-			DbUtils.close(con, stmt);
+			dbUtils.close(con, stmt);
 		}
 
 		return true;

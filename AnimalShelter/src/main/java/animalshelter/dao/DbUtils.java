@@ -6,26 +6,37 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import animalshelter.dao.exception.DataBaseException;
 
+@Component
 public class DbUtils {
 
-	static final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
-	static final String DB_URL = "jdbc:oracle:thin:@localhost:1521:xe";
-	static final String USER = "animal_shelter";
-	static final String PASS = "dragon";
+	@Value("${db.driver}")
+	private String driver;
+	
+	@Value("${db.url}")
+	private String url;
+	
+	@Value("${db.user}")
+	private String user;
+	
+	@Value("${db.password}")
+	private String password;
 
-	private static Connection connection;
-
-	public static Connection getConnection() throws ClassNotFoundException, SQLException {
-		if (connection == null) {
-			Class.forName(JDBC_DRIVER);
-			connection = DriverManager.getConnection(DB_URL, USER, PASS);
-		}
-		return connection;
+	public DbUtils() {
+		
 	}
 
-	public static void close(Connection con, Statement stmt) throws DataBaseException {
+	public Connection getConnection() throws ClassNotFoundException, SQLException {
+			Class.forName(driver);
+			return  DriverManager.getConnection(url, user, password);
+		
+	}
+
+	public void close(Connection con, Statement stmt) throws DataBaseException {
 		try {
 			stmt.close();
 			con.close();
@@ -35,7 +46,7 @@ public class DbUtils {
 
 	}
 
-	public static void close(Connection con, Statement stmt, ResultSet rs) throws DataBaseException {
+	public void close(Connection con, Statement stmt, ResultSet rs) throws DataBaseException {
 		try {
 			rs.close();
 			stmt.close();
