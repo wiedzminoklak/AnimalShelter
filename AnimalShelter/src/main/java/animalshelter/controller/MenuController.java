@@ -5,7 +5,9 @@ import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import animalshelter.constant.Const;
 import animalshelter.dao.exception.DataBaseException;
+import animalshelter.dao.exception.FullShelterException;
 import animalshelter.dao.exception.JdbcDriverNotFound;
 import animalshelter.dao.repository.AnimalRepository;
 import animalshelter.dao.repository.IAnimalRepository;
@@ -36,6 +38,7 @@ public class MenuController {
 				System.out.println("2) Add animal");
 				System.out.println("3) Edit animal");
 				System.out.println("4) Delete animal");
+				System.out.println("5) Status");
 				System.out.println("0) Exit");
 
 				String choose = scanner.next();
@@ -53,6 +56,9 @@ public class MenuController {
 						break;
 					case "4":
 						deleteAnimal();
+						break;
+					case "5":
+						status();
 						break;
 					case "0":
 						exit();
@@ -74,6 +80,8 @@ public class MenuController {
 					System.out.println("Application cannot find JDBC driver!");
 				} catch (DataBaseException e) {
 					System.out.println("Database error please try later!");
+				} catch (FullShelterException e) {
+					System.out.println("Cannot add animal. Shelter is full!");
 				}
 			}
 		}
@@ -91,7 +99,7 @@ public class MenuController {
 		}
 	}
 
-	private void addAnimal() throws BadLongValidationException, BadKindValidationException, BadNameValidationException, BadIntegerValidationException, BadDoubleValidationException, JdbcDriverNotFound, DataBaseException {
+	private void addAnimal() throws BadLongValidationException, BadKindValidationException, BadNameValidationException, BadIntegerValidationException, BadDoubleValidationException, JdbcDriverNotFound, DataBaseException, FullShelterException {
 		Scanner scanner = new Scanner(System.in);
 		
 		System.out.print("Kind: ");
@@ -165,6 +173,10 @@ public class MenuController {
 		}
 	}
 
+	private void status() throws JdbcDriverNotFound, DataBaseException {
+		System.out.println("Animals in shelter: " + animalRepository.getCapacity() + "/" + Const.MAX_CAPACITY);
+	}
+	
 	private void exit() {
 		isEnd = true;
 	}
