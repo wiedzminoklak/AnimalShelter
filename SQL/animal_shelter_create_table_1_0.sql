@@ -1,6 +1,6 @@
 CREATE TABLE kind (
 	kind_id			INTEGER			NOT NULL		CONSTRAINT pk_kind	PRIMARY KEY,
-	name			INTEGER			NOT NULL
+	name			VARCHAR2(50)	NOT NULL
 );
 
 CREATE SEQUENCE kind_seq;
@@ -36,6 +36,24 @@ FOR EACH ROW
 BEGIN
 	SELECT	animal_seq.NEXTVAL
 	INTO	:new.animal_id
+	FROM	dual;
+END;
+/
+
+CREATE TABLE users (
+	user_id			INTEGER			NOT NULL		CONSTRAINT pk_user	PRIMARY KEY,
+	name			VARCHAR2(50)	NOT NULL,
+	password		VARCHAR2(120)	NOT NULL
+);
+
+CREATE SEQUENCE user_seq;
+
+CREATE OR REPLACE TRIGGER user_seq_trg
+BEFORE INSERT ON users
+FOR EACH ROW
+BEGIN
+	SELECT	user_seq.NEXTVAL
+	INTO	:new.user_id
 	FROM	dual;
 END;
 /
